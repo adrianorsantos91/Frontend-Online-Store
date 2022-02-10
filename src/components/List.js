@@ -1,7 +1,7 @@
 import React from 'react';
 import * as api from '../services/api';
 
-class CategoriesList extends React.Component {
+class List extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -34,7 +34,7 @@ class CategoriesList extends React.Component {
       <div>
         { listCategories.map((category) => (
           <div key={ category.id }>
-            <label data-testid="category" htmlFor={ category.id } >
+            <label data-testid="category" htmlFor={ category.id }>
               <input id={ category.id } type="radio" />
               { category.name }
             </label>
@@ -44,4 +44,4 @@ class CategoriesList extends React.Component {
     );
   }
 }
-export default CategoriesList;
+export default List;
