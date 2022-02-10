@@ -8,39 +8,46 @@ class Search extends Component {
     this.state = {
       nameProduct: '',
       listProducts: [],
-    }
+    };
   }
-  
+
   handleChanges = ({ target }) => {
     this.setState({
-        nameProduct: target.value,
+      nameProduct: target.value,
     });
   }
 
   handleClick = async () => {
     const { nameProduct } = this.state;
-    console.log(nameProduct);
     const getProducts = await api.getProductsFromQuery(nameProduct);
-    console.log(getProducts);
     this.setState({
-      listProducts: getProducts,
+      listProducts: getProducts.results,
     });
   }
 
   render() {
+    const { listProducts } = this.state;
     return (
       <div>
-        <input 
-        type="text" 
-        data-testid="query-input" 
-        onChange={ this.handleChanges }
+        <input
+          type="text"
+          data-testid="query-input"
+          onChange={ this.handleChanges }
         />
-        <button 
-        data-testid="query-button" 
-        onClick= { this.handleClick }
+        <button
+          type="button"
+          data-testid="query-button"
+          onClick={ this.handleClick }
         >
-          Button
+          Pesquisar
         </button>
+        {listProducts.map((product) => (
+          <ProductsList
+            key={ product.id }
+            title={ product.title }
+            thumbnail={ product.thumbnail }
+            price={ product.price }
+          />))}
       </div>
     );
   }

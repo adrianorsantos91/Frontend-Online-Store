@@ -6,7 +6,6 @@ class CategoriesList extends React.Component {
     super();
     this.state = {
       listCategories: [],
-      listProducts: [],
     };
   }
 
@@ -21,20 +20,13 @@ class CategoriesList extends React.Component {
     });
   }
 
-  handleProducts = async () => {
-    const getProducts = await api.getProductsFromQuery();
-    this.setState({
-      listProducts: getProducts,
-    });
-  }
-
   render() {
     const { listCategories } = this.state;
     return (
       <div>
         { listCategories.map((category) => (
           <div key={ category.id }>
-            <label data-testid="category" htmlFor={ category.id } >
+            <label data-testid="category" htmlFor={ category.id }>
               <input id={ category.id } type="radio" />
               { category.name }
             </label>
