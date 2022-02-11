@@ -1,56 +1,42 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ProductsList from './ProductsList';
-import * as api from '../services/api';
 
 class Search extends Component {
-  constructor() {
-    super();
-    this.state = {
-      nameProduct: '',
-      listProducts: [],
-    };
-  }
-
-  handleChanges = ({ target }) => {
-    this.setState({
-      nameProduct: target.value,
-    });
-  }
-
-  handleClick = async () => {
-    const { nameProduct } = this.state;
-    const getProducts = await api.getProductsFromQuery(nameProduct);
-    this.setState({
-      listProducts: getProducts.results,
-    });
-  }
-
   render() {
-    const { listProducts } = this.state;
+    const { listProducts, loadProduct, handleChanges, handleClick } = this.props;
     return (
       <div>
         <input
           type="text"
           data-testid="query-input"
-          onChange={ this.handleChanges }
+          onChange={ handleChanges }
         />
         <button
           type="button"
           data-testid="query-button"
-          onClick={ this.handleClick }
+          onClick={ handleClick }
         >
           Pesquisar
         </button>
-        {listProducts.map((product) => (
+        {loadProduct ? listProducts.map((product) => (
           <ProductsList
             key={ product.id }
             title={ product.title }
             thumbnail={ product.thumbnail }
             price={ product.price }
-          />))}
+            onclickCategory={ this.onclickCategory }
+          />)) : <p>Nenhum produto foi encontrado</p> }
       </div>
     );
   }
 }
+
+Search.propTypes = {
+  listProducts: PropTypes.arrayOf(PropTypes.string).isRequired,
+  loadProduct: PropTypes.bool.isRequired,
+  handleChanges: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
+};
 
 export default Search;
