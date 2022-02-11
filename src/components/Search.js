@@ -22,6 +22,7 @@ class Search extends Component {
         {loadProduct ? listProducts.map((product) => (
           <ProductsList
             key={ product.id }
+            id={ product.id }
             title={ product.title }
             thumbnail={ product.thumbnail }
             price={ product.price }
@@ -33,7 +34,7 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  listProducts: PropTypes.arrayOf(PropTypes.string).isRequired,
+  listProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
   loadProduct: PropTypes.bool.isRequired,
   handleChanges: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
