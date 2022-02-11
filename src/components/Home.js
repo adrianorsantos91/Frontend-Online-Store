@@ -9,7 +9,7 @@ class Home extends React.Component {
     super();
     this.state = {
       categoryId: '',
-      nameProduct: '',
+      nProduct: '',
       listProducts: [],
       loadProduct: false,
     };
@@ -20,9 +20,9 @@ class Home extends React.Component {
   }
 
   handleClick = async () => {
-    const { nameProduct, categoryId } = this.state;
+    const { nProduct, categoryId } = this.state;
     const NUM = 0;
-    const getProducts = await api.getProductsFromCategAndQuery(categoryId, nameProduct);
+    const getProducts = await api.getProductsFromCategoryAndQuery(categoryId, nProduct);
     console.log(getProducts.results);
     if (getProducts.results.length !== NUM) {
       this.setState({
@@ -46,7 +46,7 @@ class Home extends React.Component {
 
   handleChanges = ({ target }) => {
     this.setState({
-      nameProduct: target.value,
+      nProduct: target.value,
     });
   }
 
