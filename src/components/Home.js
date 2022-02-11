@@ -22,7 +22,7 @@ class Home extends React.Component {
   handleClick = async () => {
     const { nameProduct, categoryId } = this.state;
     const NUM = 0;
-    const getProducts = await api.getProductsFromCategoryAndQuery(categoryId, nameProduct);
+    const getProducts = await api.getProductsFromCategAndQuery(categoryId, nameProduct);
     console.log(getProducts.results);
     if (getProducts.results.length !== NUM) {
       this.setState({
@@ -39,10 +39,9 @@ class Home extends React.Component {
   onclickCategory = ({ target }) => {
     this.setState({
       categoryId: target.id,
-    },() => {
+    }, () => {
       this.handleClick();
     });
-   
   }
 
   handleChanges = ({ target }) => {
