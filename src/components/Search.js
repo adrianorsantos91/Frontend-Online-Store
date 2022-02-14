@@ -4,7 +4,13 @@ import ProductsList from './ProductsList';
 
 class Search extends Component {
   render() {
-    const { listProducts, loadProduct, handleChanges, handleClick } = this.props;
+    const {
+      listProducts,
+      loadProduct,
+      handleChanges,
+      handleClick,
+      onClickButtonToCart,
+    } = this.props;
     return (
       <div>
         <input
@@ -26,7 +32,7 @@ class Search extends Component {
             title={ product.title }
             thumbnail={ product.thumbnail }
             price={ product.price }
-            onclickCategory={ this.onclickCategory }
+            onClickButtonToCart={ onClickButtonToCart }
           />)) : <p>Nenhum produto foi encontrado</p> }
       </div>
     );
@@ -38,6 +44,7 @@ Search.propTypes = {
   loadProduct: PropTypes.bool.isRequired,
   handleChanges: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
+  onClickButtonToCart: PropTypes.func.isRequired,
 };
 
 export default Search;
