@@ -20,7 +20,6 @@ class Product extends React.Component {
   getProducts = async () => {
     const { match } = this.props;
     const productInfo = await api.getProductsFromId(match.params.id);
-    console.log(productInfo);
     this.setState({
       title: productInfo.title,
       price: productInfo.price,

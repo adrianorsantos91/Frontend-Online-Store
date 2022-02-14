@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import CategoriesList from './CategoriesList';
 import Search from './Search';
 import * as api from '../services/api';
@@ -13,17 +14,12 @@ class Home extends React.Component {
       listProducts: [],
       loadProduct: false,
     };
-
-    this.onclickCategory = this.onclickCategory.bind(this);
-    this.handleChanges = this.handleChanges.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick = async () => {
     const { nProduct, categoryId } = this.state;
     const NUM = 0;
     const getProducts = await api.getProductsFromCategoryAndQuery(categoryId, nProduct);
-    console.log(getProducts.results);
     if (getProducts.results.length !== NUM) {
       this.setState({
         listProducts: getProducts.results,
@@ -52,6 +48,7 @@ class Home extends React.Component {
 
   render() {
     const { listProducts, loadProduct } = this.state;
+    const { onClickButton } = this.props;
     return (
       <div>
         <CategoriesList
@@ -62,14 +59,24 @@ class Home extends React.Component {
           loadProduct={ loadProduct }
           handleChanges={ this.handleChanges }
           handleClick={ this.handleClick }
+          onClickButtonToCart={ onClickButton }
         />
-        <Link to="/cart" data-testid="shopping-cart-button">Carrinho</Link>
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
+        <Link
+          to="/cart"
+          data-testid="shopping-cart-button"
+        >
+          Carrinho
+        </Link>
       </div>
     );
   }
 }
+
+Home.propTypes = {
+  onClickButton: PropTypes.func.isRequired,
+};
 
 export default Home;
