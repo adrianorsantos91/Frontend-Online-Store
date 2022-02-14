@@ -45,7 +45,13 @@ class App extends React.Component {
             render={ (props) => (
               <Cart { ...props } cartItens={ cartComplete } cartTest={ cartTest } />) }
           />
-          <Route path="/Product/:id" render={ (props) => <Product { ...props } /> } />
+          <Route
+            path="/Product/:id"
+            render={ (props) => (<Product
+              { ...props }
+              onClickButton={ this.onClickButton }
+            />) }
+          />
         </Switch>
       </BrowserRouter>
     );
