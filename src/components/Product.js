@@ -11,11 +11,28 @@ class Product extends React.Component {
       price: '',
       thumbnail: '',
       attributes: [],
+      email: '',
+      comment: '',
+      avaliation: [],
     };
   }
 
   componentDidMount = () => {
     this.getProducts();
+  }
+
+  sendToLocal = () => {
+    const { email, comment, avaliation } = this.state;
+    this.setState({
+      avaliation: [...avaliation, { email, comment }],
+    }, () => console.log(avaliation));
+    localStorage.setItem('email', email);
+    localStorage.setItem('comment', comment);
+    // const result = localStorage.getItem('email');
+  }
+
+  handleInputText = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
   }
 
   getProducts = async () => {
@@ -42,6 +59,32 @@ class Product extends React.Component {
             Carrinho
           </Link>
         </div>
+
+        <p>Avaliações</p>
+        <form>
+          <input
+            name="email"
+            placeholder="Email"
+            type="email"
+            data-testid="product-detail-email"
+            onChange={ this.handleInputText }
+          />
+          <br />
+          <textarea
+            name="comment"
+            placeholder="Comentário sobre o produto. (opcional)"
+            data-testid="product-detail-evaluation"
+            onChange={ this.handleInputText }
+          />
+          <button
+            type="button"
+            data-testid="submit-review-btn"
+            onClick={ this.sendToLocal }
+          >
+            Enviar
+          </button>
+        </form>
+
         <div>
           <p data-testid="product-detail-name">{ title }</p>
           <img src={ thumbnail } alt={ title } />
