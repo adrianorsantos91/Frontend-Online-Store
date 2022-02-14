@@ -4,22 +4,33 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Cart from './components/Cart';
 import Product from './components/Product';
+import * as api from './services/api';
 
 class App extends React.Component {
   state = {
-    cartId: [],
+    cartComplete: [],
+    cartTest: [],
   }
 
-  onClickButton = ({ target }) => {
-    const { cartId } = this.state;
-    const idProduct = target.id;
+  getItems = async (item) => {
+    const { cartComplete } = this.state;
+    const result = await api.getProductsFromId(item);
     this.setState(() => ({
-      cartId: [...cartId, idProduct],
+      cartComplete: [...cartComplete, result],
     }));
   }
 
+  onClickButton = ({ target }) => {
+    const { cartTest } = this.state;
+    const idProduct = target.id;
+    this.setState({
+      cartTest: [...cartTest, target.id],
+    });
+    this.getItems(idProduct);
+  }
+
   render() {
-    const { cartId } = this.state;
+    const { cartComplete, cartTest } = this.state;
     return (
       <BrowserRouter>
         <Switch>
@@ -32,7 +43,8 @@ class App extends React.Component {
           <Route
             exact
             path="/cart"
-            render={ (props) => <Cart { ...props } cartItens={ cartId } /> }
+            render={ (props) => (
+              <Cart { ...props } cartItens={ cartComplete } cartTest={ cartTest } />) }
           />
           <Route path="/Product/:id" render={ (props) => <Product { ...props } /> } />
         </Switch>
