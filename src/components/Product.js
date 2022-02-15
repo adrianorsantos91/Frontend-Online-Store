@@ -11,27 +11,73 @@ class Product extends React.Component {
       price: '',
       thumbnail: '',
       attributes: [],
+      email: '',
+      comment: '',
+      note: '',
+      NUMs: [],
+      avaliation: [],
+      avaliationLocal: [],
     };
   }
 
   componentDidMount = () => {
     this.getProducts();
+    this.getLocalStorage();
+  }
+
+  getLocalStorage = () => {
+    const avaliation = localStorage.getItem('avaliation');
+    const result = JSON.parse(avaliation) || []; // condicional de Json.parse === Undefined atribui a segunda condição.
+    this.setState({
+      avaliationLocal: result,
+    });
+  }
+
+  updateLocalStorage = () => {
+    const { avaliation } = this.state;
+    localStorage.setItem('avaliation', JSON.stringify(avaliation));
+    this.getLocalStorage();
+  }
+
+  sendToLocal = () => {
+    const { email, comment, note, avaliation } = this.state;
+    this.setState({
+      avaliation: [...avaliation, { email, comment, note }],
+    }, () => this.updateLocalStorage());
+
+    // localStorage.setItem('comment', comment);
+    // const result = localStorage.getItem('email');
+  }
+
+  handleInputText = ({ target }) => {
+    console.log(target);
+    const { name } = target;
+    const { value } = target;
+    this.setState({ [name]: value });
   }
 
   getProducts = async () => {
     const { match } = this.props;
     const productInfo = await api.getProductsFromId(match.params.id);
+    const NUM1 = 1;
+    const NUM2 = 2;
+    const NUM3 = 3;
+    const NUM4 = 4;
+    const NUM5 = 5;
+    const NUMs = [NUM1, NUM2, NUM3, NUM4, NUM5];
     this.setState({
       title: productInfo.title,
       price: productInfo.price,
       thumbnail: productInfo.thumbnail,
       attributes: productInfo.attributes,
+      NUMs,
     });
   }
 
   render() {
-    const { title, price, thumbnail, attributes } = this.state;
+    const { title, price, thumbnail, attributes, avaliationLocal, NUMs } = this.state;
     const { onClickButton, match } = this.props;
+
     return (
       <section>
         <div>
@@ -71,6 +117,64 @@ class Product extends React.Component {
             </div>
           ))}
         </aside>
+        <div>
+          <br />
+          <p>Avaliações</p>
+          <form>
+            <input
+              id={ match.params.id }
+              name="email"
+              placeholder="Email"
+              type="email"
+              data-testid="product-detail-email"
+              onChange={ this.handleInputText }
+            />
+            <div>
+              <br />
+              { NUMs.map((NUM) => (
+                <label key={ NUM } htmlFor={ `option${NUM}` }>
+                  <input
+                    name="note"
+                    id={ `option${NUM}` }
+                    type="radio"
+                    value={ NUM }
+                    data-testid={ `${NUM}-rating` }
+                    onChange={ this.handleInputText }
+                  />
+                  {' '}
+                  { NUM }
+                </label>)) }
+            </div>
+            <br />
+            <textarea
+              name="comment"
+              placeholder="Comentário sobre o produto. (opcional)"
+              data-testid="product-detail-evaluation"
+              onChange={ this.handleInputText }
+            />
+            <br />
+            <button
+              type="button"
+              data-testid="submit-review-btn"
+              onClick={ this.sendToLocal }
+            >
+              Enviar
+            </button>
+          </form>
+        </div>
+        <div>
+          { avaliationLocal.length === 0
+            ? (
+              <p>Não possui Avaliação</p>
+            ) : (
+              avaliationLocal.map(({ email, comment, note }) => (
+                <div key={ email }>
+                  <p>{ email }</p>
+                  <p>{ note }</p>
+                  <p>{ comment }</p>
+                </div>
+              )))}
+        </div>
       </section>
     );
   }
