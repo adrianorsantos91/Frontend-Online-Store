@@ -16,22 +16,18 @@ class Product extends React.Component {
       note: '',
       NUMs: [],
       avaliation: [],
-      avaliationLocal: [{
-        email: '',
-        note: '',
-        comment: '',
-      }],
+      avaliationLocal: [],
     };
   }
 
   componentDidMount = () => {
     this.getProducts();
-    // this.getLocalStorage();
+    this.getLocalStorage();
   }
 
   getLocalStorage = () => {
     const avaliation = localStorage.getItem('avaliation');
-    const result = JSON.parse(avaliation);
+    const result = JSON.parse(avaliation) || []; // condicional de Json.parse === Undefined atribui a segunda condição.
     this.setState({
       avaliationLocal: result,
     });
@@ -53,7 +49,10 @@ class Product extends React.Component {
     // const result = localStorage.getItem('email');
   }
 
-  handleInputText = ({ target: { name, value } }) => {
+  handleInputText = ({ target }) => {
+    console.log(target);
+    const { name } = target;
+    const { value } = target;
     this.setState({ [name]: value });
   }
 
@@ -123,6 +122,7 @@ class Product extends React.Component {
           <p>Avaliações</p>
           <form>
             <input
+              id={ match.params.id }
               name="email"
               placeholder="Email"
               type="email"
@@ -132,7 +132,7 @@ class Product extends React.Component {
             <div>
               <br />
               { NUMs.map((NUM) => (
-                <label key={ NUM } htmlFor={ `option${NUM}` } control>
+                <label key={ NUM } htmlFor={ `option${NUM}` }>
                   <input
                     name="note"
                     id={ `option${NUM}` }
